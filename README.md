@@ -11,7 +11,7 @@
 #### 集成步骤
 
     dependencies {
-        implementation 'com.sherlockshi.toast:toast:3.1'
+        implementation 'com.github.SherlockShi:ToastUtils:3.1'
     }
 
 #### 初始化Toast
