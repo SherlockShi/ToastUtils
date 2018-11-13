@@ -1,13 +1,14 @@
-package com.hjq.toast.demo;
+package com.sherlockshi.toast.demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
-import com.hjq.toast.ToastUtils;
-import com.hjq.toast.style.ToastBlackStyle;
-import com.hjq.toast.style.ToastQQStyle;
-import com.hjq.toast.style.ToastWhiteStyle;
+import com.sherlockshi.toast.ToastUtils;
+import com.sherlockshi.toast.style.ToastBlackStyle;
+import com.sherlockshi.toast.style.ToastQQStyle;
+import com.sherlockshi.toast.style.ToastWhiteStyle;
 
 public class ToastActivity extends AppCompatActivity {
 
@@ -17,8 +18,20 @@ public class ToastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_toast);
     }
 
-    public void show1(final View v) {
-        ToastUtils.show("我是吐司");
+    public void showSystem(final View v) {
+        Toast.makeText(ToastActivity.this, "我是一个系统吐司", Toast.LENGTH_SHORT).show();
+    }
+
+    public void show(final View v) {
+        ToastUtils.show("我是一个普通的吐司");
+    }
+
+    public void showHint(final View v) {
+        ToastUtils.showHint("我是一个 Hint 吐司");
+    }
+
+    public void showWarn(final View v) {
+        ToastUtils.showWarn("我是一个 Warn 吐司");
     }
 
     public void show2(View v) {
@@ -32,17 +45,17 @@ public class ToastActivity extends AppCompatActivity {
 
     public void show3(View v) {
         ToastUtils.initStyle(new ToastWhiteStyle());
-        ToastUtils.show("动态切换吐司样式成功");
+        ToastUtils.show("动态切换白色吐司样式成功");
     }
 
     public void show4(View v) {
         ToastUtils.initStyle(new ToastBlackStyle());
-        ToastUtils.show("动态切换吐司样式成功");
+        ToastUtils.show("动态切换黑色吐司样式成功");
     }
 
     public void show5(View v) {
         ToastUtils.initStyle(new ToastQQStyle());
-        ToastUtils.show("QQ样式那种还不简单，分分钟的事");
+        ToastUtils.show("动态切换QQ吐司样式成功");
     }
 
     public void show6(View v) {

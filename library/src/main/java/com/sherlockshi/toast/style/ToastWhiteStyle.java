@@ -1,4 +1,4 @@
-package com.hjq.toast.style;
+package com.sherlockshi.toast.style;
 
 /**
  *    author : HJQ

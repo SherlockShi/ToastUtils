@@ -1,4 +1,4 @@
-package com.hjq.toast;
+package com.sherlockshi.toast;
 
 /**
  *    author : HJQ
@@ -15,6 +15,7 @@ public interface IToastStyle {
 
     int getCornerRadius(); // 圆角大小
     int getBackgroundColor(); // 背景颜色
+    int getBackgroundDrawable(); // 背景图片
 
     int getTextColor(); // 文本颜色
     float getTextSize(); // 文本大小

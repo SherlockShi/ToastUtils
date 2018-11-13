@@ -1,21 +1,17 @@
-package com.hjq.toast;
+package com.sherlockshi.toast;
 
 import android.app.Application;
 
 /**
  *    author : HJQ
  *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2018/11/02
- *    desc   : 不需要通知栏权限的 Toast
+ *    time   : 2018/09/17
+ *    desc   : 防止频繁弹出的Toast
  */
-final class SupportToast extends BaseToast {
+final class XToast extends BaseToast {
 
-    // 吐司弹窗显示辅助类
-    private ToastHelper mToastHelper;
-
-    SupportToast(Application application) {
+    XToast(Application application) {
         super(application);
-        mToastHelper = new ToastHelper(this, application);
     }
 
     @Override
@@ -34,7 +30,7 @@ final class SupportToast extends BaseToast {
         // 设置吐司文本
         getMessageView().setText(getText());
         // 显示吐司
-        mToastHelper.show();
+        super.show();
     }
 
     @Override
@@ -42,6 +38,6 @@ final class SupportToast extends BaseToast {
         // 移除之前显示吐司的任务
         getHandler().removeCallbacks(this);
         // 取消显示
-        mToastHelper.cancel();
+        super.cancel();
     }
 }

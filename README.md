@@ -11,7 +11,7 @@
 #### 集成步骤
 
     dependencies {
-        implementation 'com.hjq:toast:3.0'
+        implementation 'com.sherlockshi.toast:toast:3.1'
     }
 
 #### 初始化Toast
@@ -22,6 +22,8 @@
 #### 显示Toast
 
     ToastUtils.show("我是吐司");
+    ToastUtils.showHint("我是提示");
+    ToastUtils.showWarn("我是警告");
 
 #### 获取Toast对象
 
@@ -69,16 +71,9 @@
 
 ![](issue_utils.gif)
 
-#### Android技术讨论Q群：78797078
-
-#### 如果您觉得我的开源库帮你节省了大量的开发时间，请扫描下方的二维码随意打赏，要是能打赏个 10.24 :monkey_face:就太:thumbsup:了。您的支持将鼓励我继续创作:octocat:
-
-![](pay_ali.png) ![](pay_wechat.png)
-
-## License
-
+# License
 ```text
-Copyright 2018 Huang Jinqun
+Copyright 2018 SherlockShi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

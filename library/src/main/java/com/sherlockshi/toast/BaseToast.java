@@ -1,4 +1,4 @@
-package com.hjq.toast;
+package com.sherlockshi.toast;
 
 import android.app.Application;
 import android.os.Handler;

@@ -1,8 +1,8 @@
-package com.hjq.toast.style;
+package com.sherlockshi.toast.style;
 
 import android.view.Gravity;
 
-import com.hjq.toast.IToastStyle;
+import com.sherlockshi.toast.IToastStyle;
 
 /**
  *    author : HJQ
@@ -40,6 +40,11 @@ public class ToastBlackStyle implements IToastStyle {
     @Override
     public int getBackgroundColor() {
         return 0X88000000;
+    }
+
+    @Override
+    public int getBackgroundDrawable() {
+        return 0;
     }
 
     @Override

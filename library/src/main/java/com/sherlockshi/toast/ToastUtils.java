@@ -1,4 +1,4 @@
-package com.hjq.toast;
+package com.sherlockshi.toast;
 
 import android.app.AppOpsManager;
 import android.app.Application;
@@ -8,15 +8,19 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hjq.toast.style.ToastBlackStyle;
-import com.hjq.toast.style.ToastQQStyle;
-import com.hjq.toast.style.ToastWhiteStyle;
+import com.sherlockshi.toast.style.ToastBlackStyle;
+import com.sherlockshi.toast.style.ToastHintStyle;
+import com.sherlockshi.toast.style.ToastQQStyle;
+import com.sherlockshi.toast.style.ToastWarnStyle;
+import com.sherlockshi.toast.style.ToastWhiteStyle;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +38,8 @@ public final class ToastUtils {
 
     private static Toast sToast;
 
+    private static boolean isDefaultStyle = true;
+
     /**
      * 初始化ToastUtils，建议在Application中初始化
      *
@@ -48,7 +54,7 @@ public final class ToastUtils {
         // 判断有没有通知栏权限
         if (isNotificationEnabled(application)) {
             sToast = new XToast(application);
-        }else {
+        } else {
             sToast = new SupportToast(application);
         }
 
@@ -72,16 +78,42 @@ public final class ToastUtils {
      *                如果不是则显示一个整数的string
      */
     public static void show(int id) {
+        show(id, Toast.LENGTH_SHORT);
+    }
+
+    /**
+     * 显示一个吐司
+     *
+     * @param id      如果传入的是正确的string id就显示对应字符串
+     *                如果不是则显示一个整数的string
+     */
+    public static void showLong(int id) {
+        show(id, Toast.LENGTH_LONG);
+    }
+
+    /**
+     * 显示一个吐司
+     *
+     * @param id      如果传入的是正确的string id就显示对应字符串
+     *                如果不是则显示一个整数的string
+     */
+    public static void show(int id, int duration) {
 
         checkToastState();
 
         try {
+            if (isDefaultStyle) {
+                initStyle(new ToastBlackStyle());
+            }
+
             // 如果这是一个资源id
-            show(sToast.getView().getContext().getResources().getText(id));
+            show(sToast.getView().getContext().getResources().getText(id), duration);
         } catch (Resources.NotFoundException ignored) {
             // 如果这是一个int类型
             show(String.valueOf(id));
         }
+
+        isDefaultStyle = true;
     }
 
     /**
@@ -90,20 +122,79 @@ public final class ToastUtils {
      * @param text      需要显示的文本
      */
     public static void show(CharSequence text) {
+        show(text, Toast.LENGTH_SHORT);
+    }
+
+    /**
+     * 显示一个吐司
+     *
+     * @param text      需要显示的文本
+     */
+    public static void showLong(CharSequence text) {
+        show(text, Toast.LENGTH_LONG);
+    }
+
+    /**
+     * 显示一个吐司
+     *
+     * @param text      需要显示的文本
+     */
+    public static void show(CharSequence text, int duration) {
 
         checkToastState();
 
         if (text == null || text.equals("")) return;
 
-       // 如果显示的文字超过了10个就显示长吐司，否则显示短吐司
-        if (text.length() > 20) {
-            sToast.setDuration(Toast.LENGTH_LONG);
-        } else {
-            sToast.setDuration(Toast.LENGTH_SHORT);
+        if (isDefaultStyle) {
+            initStyle(new ToastBlackStyle());
         }
+
+        sToast.setDuration(duration);
 
         sToast.setText(text);
         sToast.show();
+
+        isDefaultStyle = true;
+    }
+
+    public static void showHint(CharSequence text) {
+        initStyle(new ToastHintStyle());
+        show(text);
+    }
+
+    public static void showWarn(CharSequence text) {
+        initStyle(new ToastWarnStyle());
+        show(text);
+    }
+
+    public static void showLongHint(CharSequence text) {
+        initStyle(new ToastHintStyle());
+        show(text, Toast.LENGTH_LONG);
+    }
+
+    public static void showLongWarn(CharSequence text) {
+        initStyle(new ToastWarnStyle());
+        show(text, Toast.LENGTH_LONG);
+    }
+
+    public static void showHint(int id) {
+        initStyle(new ToastHintStyle());
+        show(id);
+    }
+
+    public static void showWarn(int id) {
+        initStyle(new ToastWarnStyle());
+        show(id);
+    }
+
+    public static void showLongHint(int id) {
+        initStyle(new ToastHintStyle());
+        show(id, Toast.LENGTH_LONG);
+    }
+
+    public static void showLongWarn(int id) {
+        initStyle(new ToastWarnStyle());
+        show(id, Toast.LENGTH_LONG);
     }
 
     /**
@@ -125,6 +216,8 @@ public final class ToastUtils {
      * 给当前Toast设置新的布局，具体实现可看{@link XToast#setView(View)}
      */
     public static void setView(Context context, int layoutId) {
+        isDefaultStyle = false;
+
         if (context != context.getApplicationContext()) {
             context = context.getApplicationContext();
         }
@@ -156,7 +249,18 @@ public final class ToastUtils {
      *                      仿QQ样式：{@link ToastQQStyle}
      */
     public static void initStyle(IToastStyle style) {
-        ToastUtils.sDefaultStyle = style;
+        if (isDefaultStyle(style)) {
+            isDefaultStyle = true;
+        } else {
+            isDefaultStyle = false;
+        }
+
+        if (isDefaultStyle) {
+            ToastUtils.sDefaultStyle = new ToastBlackStyle();
+        } else {
+            ToastUtils.sDefaultStyle = style;
+        }
+
         // 如果吐司已经创建，就重新初始化吐司
         if (sToast != null) {
             //取消原有吐司的显示
@@ -186,13 +290,16 @@ public final class ToastUtils {
 
         TextView textView = new TextView(context);
         textView.setId(R.id.toast_main_text_view_id);
+        textView.setGravity(Gravity.CENTER);
         textView.setTextColor(sDefaultStyle.getTextColor());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sp2px(context, sDefaultStyle.getTextSize()));
         textView.setPadding(dp2px(context, sDefaultStyle.getPaddingLeft()), dp2px(context, sDefaultStyle.getPaddingTop()),
                 dp2px(context, sDefaultStyle.getPaddingRight()), dp2px(context, sDefaultStyle.getPaddingBottom()));
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // setBackground API版本兼容
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (sDefaultStyle.getBackgroundDrawable() != 0) {
+            textView.setBackgroundResource(sDefaultStyle.getBackgroundDrawable());
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             textView.setBackground(drawable);
         }else {
             textView.setBackgroundDrawable(drawable);
@@ -257,6 +364,14 @@ public final class ToastUtils {
             }
         } else {
             return true;
+        }
+    }
+
+    private static boolean isDefaultStyle(IToastStyle style) {
+        if (TextUtils.equals(style.getClass().getSimpleName(), ToastBlackStyle.class.getSimpleName())) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

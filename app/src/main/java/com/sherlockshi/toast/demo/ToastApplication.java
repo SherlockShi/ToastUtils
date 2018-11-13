@@ -1,8 +1,8 @@
-package com.hjq.toast.demo;
+package com.sherlockshi.toast.demo;
 
 import android.app.Application;
 
-import com.hjq.toast.ToastUtils;
+import com.sherlockshi.toast.ToastUtils;
 
 public class ToastApplication extends Application {
 
