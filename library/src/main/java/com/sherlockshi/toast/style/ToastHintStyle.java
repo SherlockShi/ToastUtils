@@ -11,11 +11,11 @@ public class ToastHintStyle extends ToastBlackStyle {
 
     @Override
     public int getBackgroundDrawable() {
-        return R.drawable.toast_bg_blue;
+        return R.drawable.bg_toast_util;
     }
 
     @Override
     public int getTextColor() {
-        return 0XFF196FFA;
+        return 0XFF3997F4;
     }
 }
